@@ -1,0 +1,1 @@
+export type TRmSize = 's' | 'm' | 'l';
