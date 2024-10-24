@@ -7,11 +7,7 @@ import RmInputSelect from "../../../library/components/input-select/RmInputSelec
 import RmSeparator from "../../../library/components/separator/RmSeparator";
 import RmCheckbox from "../../../library/components/checkbox/RmCheckbox";
 import { IFormAuth } from "../../core/interfaces";
-import {
-  CREDENTIALS_ERRORS,
-  getUserValue,
-  verifyCredentials,
-} from "./services";
+import { CREDENTIALS_ERRORS, getUserValue, verifyCredentials } from "./services";
 import { useNavigate } from "react-router-dom";
 import { IUserAuth } from "../../core/store/types";
 import { SESSION_STORAGE } from "../../core/constants";
@@ -31,13 +27,50 @@ const AuthModule = () => {
     isPrivacyPolicy: false,
   });
 
-  const [messageError, setMessageError] = useState<string>("");
+  const [errors, setErrors] = useState({
+    numberDocument: "",
+    numberCellPhone: "",
+    isPrivacyPolicy: "",
+    isCommunicationPolicy: "",
+  });
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const validateInput = (field: string, value: string | boolean) => {
+    let error = "";
+
+    switch (field) {
+      case "numberDocument":
+        if (value.toString().length < 8) {
+          error = "El número de documento debe tener al menos 8 caracteres.";
+        }
+        break;
+      case "numberCellPhone":
+        if (value.toString().length < 9) {
+          error = "El número de celular debe tener al menos 9 caracteres.";
+        }
+        break;
+      case "isPrivacyPolicy":
+        if (!value) {
+          error = "Debe aceptar la Política de Privacidad.";
+        }
+        break;
+      case "isCommunicationPolicy":
+        if (!value) {
+          error = "Debe aceptar la Política de Comunicaciones Comerciales.";
+        }
+        break;
+      default:
+        break;
+    }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+  };
 
   const verifyFormValid = () => {
     return (
-      form.numberCellPhone.length > 0 &&
-      form.numberDocument.length > 0 &&
+      form.numberCellPhone.length >= 9 &&
+      form.numberDocument.length >= 8 &&
       form.isPrivacyPolicy &&
       form.isCommunicationPolicy
     );
@@ -46,7 +79,12 @@ const AuthModule = () => {
   const userValues = async () => {
     try {
       setIsLoading(true);
-      setMessageError("");
+      setErrors({
+        numberDocument: "",
+        numberCellPhone: "",
+        isPrivacyPolicy: "",
+        isCommunicationPolicy: "",
+      });
 
       verifyCredentials(form.numberDocument, form.numberCellPhone);
       const user = await getUserValue();
@@ -66,13 +104,11 @@ const AuthModule = () => {
         JSON.stringify(userAuth)
       );
     } catch (error: any) {
-      setMessageError("Ocurrio un error, intente de nuevo.");
-      if (CREDENTIALS_ERRORS["document"] === error?.message) {
-        setMessageError("Documento incorrecto.");
-      }
-      if (CREDENTIALS_ERRORS["phone"] === error?.message) {
-        setMessageError("Numero de celular incorrecto.");
-      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        numberDocument: CREDENTIALS_ERRORS["document"] === error?.message ? "Documento incorrecto." : "",
+        numberCellPhone: CREDENTIALS_ERRORS["phone"] === error?.message ? "Número de celular incorrecto." : "",
+      }));
     }
     setIsLoading(false);
   };
@@ -106,37 +142,52 @@ const AuthModule = () => {
               label="Nro. de documento"
               placeholder="Nro. de documento"
               type="number"
-              changeValue={(numberDocument) =>
-                setForm({ ...form, numberDocument })
-              }
+              changeValue={(numberDocument) => {
+                setForm({ ...form, numberDocument });
+                validateInput("numberDocument", numberDocument);
+              }}
             />
+            {errors.numberDocument && (
+              <span className="message-error-form">*{errors.numberDocument}</span>
+            )}
             <RmSeparator height={15} />
             <RmInput
               value={form.numberCellPhone}
               label="Celular"
               placeholder="Celular"
               type="number"
-              changeValue={(numberCellPhone) =>
-                setForm({ ...form, numberCellPhone })
-              }
+              changeValue={(numberCellPhone) => {
+                setForm({ ...form, numberCellPhone });
+                validateInput("numberCellPhone", numberCellPhone);
+              }}
             />
+            {errors.numberCellPhone && (
+              <span className="message-error-form">*{errors.numberCellPhone}</span>
+            )}
             <RmSeparator height={20} />
-
             <RmCheckbox
               value={form.isPrivacyPolicy}
-              label="Acepto lo Política de Privacidad"
-              changeValue={(isPrivacyPolicy) =>
-                setForm({ ...form, isPrivacyPolicy })
-              }
+              label="Acepto la Política de Privacidad"
+              changeValue={(isPrivacyPolicy) => {
+                setForm({ ...form, isPrivacyPolicy });
+                validateInput("isPrivacyPolicy", isPrivacyPolicy);
+              }}
             />
+            {errors.isPrivacyPolicy && (
+              <span className="message-error-form">{errors.isPrivacyPolicy}</span>
+            )}
             <RmSeparator height={10} />
             <RmCheckbox
               value={form.isCommunicationPolicy}
-              label="Acepto la Política Comunicaciones Comerciales"
-              changeValue={(isCommunicationPolicy) =>
-                setForm({ ...form, isCommunicationPolicy })
-              }
+              label="Acepto la Política de Comunicaciones Comerciales"
+              changeValue={(isCommunicationPolicy) => {
+                setForm({ ...form, isCommunicationPolicy });
+                validateInput("isCommunicationPolicy", isCommunicationPolicy);
+              }}
             />
+            {errors.isCommunicationPolicy && (
+              <span className="message-error-form">{errors.isCommunicationPolicy}</span>
+            )}
             <RmSeparator height={8} />
             <span className="termins-conditions cp">
               Aplican Términos y Condiciones.
@@ -146,15 +197,12 @@ const AuthModule = () => {
               <RmButton
                 label="Cotiza aquí"
                 changeButton={() => userValues()}
-                disabled={!verifyFormValid() || isLoading}
+                disabled={isLoading}
                 size={window.innerWidth >= 500 ? "l" : "m"}
                 theme="secondary"
               />
             </div>
             <RmSeparator height={10} />
-            {messageError.length > 0 && (
-              <span className="message-error-form">{messageError} *</span>
-            )}
             <RmSeparator height={20} />
           </div>
         </div>

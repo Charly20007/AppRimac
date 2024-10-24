@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# PRUEBA TECNICA - RIMAC
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Descripcion:
 
-## Available Scripts
+Desarrollo de maquetacion de figma y consumo de api rest haciendo uso de fecth, del reto frontend Rimac
 
-In the project directory, you can run:
+### Inicar
 
-### `npm start`
+1.  Instalar los paquetes: npm install
+2.  Levantar servidor: npm run start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### Credenciales:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Estas son las credenciales para poder logearse
 
-### `npm test`
+    document: "30216147",
+    phone: "5130216147",
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Definicion
 
-### `npm run build`
+- La aplicacion cuenta con de rutas, la principal que se necesitan credenciales, y la ruta /dashboar en esta le permite seleccionar el plan, para este entonces los datos del usuario obtenido se almacenan en redux para mantener el estado.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Los datos del plan seleccionado tambien se almacenan en redux, para poder visualizarlos en la vista de resumen, y cada vez que se regresaa la pagina principal, los datos deredux se eliminan.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### La estructura de archivos cuenta con 4 directorios:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1.  [APP]: Aqui permite crear 3 directorios
+2.  [ASSETS]: Aqui se almacenan las imagenes, svgs, y estilos si lo require.
+3.  [LIBRARY]: Esta carperta simula una libreria externa de componente, ya sea input, select, botones.
+4.  [STYLES]: Se almacenan estilos globales de la aplicacion ya sean colores, clases genericas, tipos de letra, etc.
 
-### `npm run eject`
+##### Se ha hecho uso de la api de google para obtener un tipo de fuente y algunos iconos que se requerian par algunos componentes.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Librerias utilziadas.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Redux toolkit para manejar el estado global de la aplicacion.
+2. React router para manejar diferentes rutas
+3. Sass.
+4. Jest para aplicar test a algunos componentes, reduc, hooks.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
